@@ -47,20 +47,21 @@ def respond():
 
     audio_file = azure_tts_urdu(response)
 
-if audio_file and os.path.exists(audio_file):
-    from flask import after_this_request
+    if audio_file and os.path.exists(audio_file):
+        from flask import after_this_request
 
-    @after_this_request
-    def cleanup(response_obj):
-        try:
-            os.remove(audio_file)
-        except Exception as e:
-            print(f"Cleanup error: {e}")
-        return response
+        @after_this_request
+        def cleanup(response_obj):
+            try:
+                os.remove(audio_file)
+            except Exception as e:
+                print(f"Cleanup error: {e}")
+            return response_obj
 
-    return send_file(audio_file, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
-else:
-    return jsonify({"error": "Failed to generate or locate audio file"}), 500
+        return send_file(audio_file, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+    else:
+        return jsonify({"error": "Failed to generate or locate audio file"}), 500
+
 
 
 @app.route("/transcribe_translate", methods=["POST"])
@@ -104,6 +105,7 @@ def transcribe_and_translate():
     except Exception as e:
         return jsonify({"error": str(e)}), 500
 
+
 @app.route("/voice_assist", methods=["POST"])
 def voice_assist():
     if "audio" not in request.files:
@@ -141,32 +143,34 @@ def voice_assist():
 
         # TTS Urdu audio response
         audio_response_path = azure_tts_urdu(response_text)
-os.remove(file_path)
-except Exception as e:
-    print(f"Error deleting file: {e}")
 
-if audio_response_path and os.path.exists(audio_response_path):
-    from flask import after_this_request
-
-    @after_this_request
-    def cleanup(response_obj):
         try:
-            os.remove(audio_response_path)
+            os.remove(file_path)
         except Exception as e:
-            print(f"Cleanup error: {e}")
-        return response_obj
+            print(f"Error removing file: {e}")
 
-    return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
-else:
-    return jsonify({"error": "Failed to generate or locate audio response"}), 500
+        if audio_response_path and os.path.exists(audio_response_path):
+            from flask import after_this_request
 
-        
+            @after_this_request
+            def cleanup(response_obj):
+                try:
+                    os.remove(audio_response_path)
+                except Exception as e:
+                    print(f"Cleanup error: {e}")
+                return response_obj
 
+            return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+        else:
+            return jsonify({"error": "Failed to generate or locate audio response"}), 500
 
     except sr.UnknownValueError:
         return jsonify({"error": "Could not understand audio"}), 400
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+
 
 # ---------------------- RUN APP ---------------------- #
 
