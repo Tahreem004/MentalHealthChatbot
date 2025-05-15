@@ -56,7 +56,7 @@ if audio_file and os.path.exists(audio_file):
             os.remove(audio_file)
         except Exception as e:
             print(f"Cleanup error: {e}")
-        return response_obj
+        return response
 
     return send_file(audio_file, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
 else:
