@@ -142,6 +142,8 @@ def voice_assist():
         # TTS Urdu audio response
         audio_response_path = azure_tts_urdu(response_text)
 os.remove(file_path)
+except Exception as e:
+    print(f"Error deleting file: {e}")
 
 if audio_response_path and os.path.exists(audio_response_path):
     from flask import after_this_request
