@@ -107,8 +107,6 @@ def generate_response(english_text):
         return "Error generating response."
     
 
-
-
 def azure_tts_urdu(text):
     try:
         urdu_text = translate_english_to_urdu(text)
@@ -126,16 +124,21 @@ def azure_tts_urdu(text):
             "X-Microsoft-OutputFormat": "audio-16khz-32kbitrate-mono-mp3",
             "User-Agent": "UrduMentalHealthBot"
         }
+
         response = requests.post(tts_url, headers=headers, data=ssml.encode("utf-8"))
 
         if response.status_code == 200:
-            filename = f"response_{uuid.uuid4().hex}.mp3"
+            # ✅ Save audio to "temp/" folder with valid filename
+            os.makedirs("temp", exist_ok=True)
+            filename = f"temp/response_{uuid.uuid4().hex}.mp3"
             with open(filename, "wb") as f:
                 f.write(response.content)
-            return filename
+            return filename  # ✅ Return path, not file object
         else:
             print("Azure TTS Error:", response.status_code, response.text)
             return None
     except Exception as e:
         print(f"TTS Exception: {e}")
         return None
+
+
