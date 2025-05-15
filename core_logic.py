@@ -12,17 +12,13 @@ import azure.cognitiveservices.speech as speechsdk
 from deep_translator import GoogleTranslator
 
 # Load API keys from environment variables
-
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 AZURE_TTS_KEY_1 = os.getenv("AZURE_TTS_KEY_1")
 AZURE_TRANSLATOR_KEY = os.getenv("AZURE_TRANSLATOR_KEY")
 AZURE_REGION = os.getenv("AZURE_REGION")
 AZURE_TRANSLATOR_REGION = os.getenv("AZURE_TRANSLATOR_REGION")
-
+OPENAI_API_URL = "https://api.openai.com/v1/chat/completions"
 translator_endpoint = "https://api.cognitive.microsofttranslator.com"
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-OPENAI_API_URL = "https://api.openai.com/v1/chat/completions" 
-MODEL_NAME = "gpt-4o"  # or "gpt-4o-mini" or "gpt-4" depending on your access
 
 def translate_urdu_to_english(text):
     try:
@@ -55,15 +51,12 @@ def is_query_mental_health_related(text):
         f"Text: \"{text}\"\nAnswer:"
     )
     payload = {
-        "model": MODEL_NAME,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0.0,
-        "max_tokens": 5,
+        "model": "gpt-4o",
+        "messages": [{"role": "user", "content": prompt}]
     }
 
     try:
-        response = requests.post(OPENAI_API_URL, headers=headers, json=payload, timeout=10)
-        response.raise_for_status()
+        response = requests.post(OPENAI_URL, headers=headers, json=payload)
         result = response.json()
         answer = result["choices"][0]["message"]["content"].strip().lower()
         return "yes" in answer
@@ -79,33 +72,22 @@ def generate_response(english_text):
         "X-Title": "MentalHealthBot"
     }
     payload = {
-        "model": MODEL_NAME,
-        "temperature": 0.7,
-        "max_tokens": 150,
-        "messages" : [
-       {
-           "role": "system",
-           "content": (
-               "You are a kind and helpful mental health therapist. "
-               "Provide concise, precise, and short responses suitable for Urdu-speaking users."
-           )
-       },
-       {
-           "role": "user",
-           "content": f"A patient says: \"{english_text}\". Respond briefly and helpfully."
-       }
-   ]
+        "model": "gpt-4o",
+        "messages": [
+            {
+                "role": "user",
+                "content": f"A patient says: \"{english_text}\". Respond shortly as a kind and helpful mental health therapist."
+            }
+        ]
     }
 
     try:
-        response = requests.post(OPENAI_API_URL, headers=headers, json=payload, timeout=10)
-        response.raise_for_status()
+        response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
         result = response.json()
         return result["choices"][0]["message"]["content"].strip()
     except Exception as e:
         print(f"Response generation failed: {e}")
         return "Error generating response."
-    
 
 def azure_tts_urdu(text):
     try:
@@ -124,16 +106,13 @@ def azure_tts_urdu(text):
             "X-Microsoft-OutputFormat": "audio-16khz-32kbitrate-mono-mp3",
             "User-Agent": "UrduMentalHealthBot"
         }
-
         response = requests.post(tts_url, headers=headers, data=ssml.encode("utf-8"))
 
         if response.status_code == 200:
-            # ✅ Save audio to "temp/" folder with valid filename
-            os.makedirs("temp", exist_ok=True)
-            filename = f"temp/response_{uuid.uuid4().hex}.mp3"
+            filename = f"response_{uuid.uuid4().hex}.mp3"
             with open(filename, "wb") as f:
                 f.write(response.content)
-            return filename  # ✅ Return path, not file object
+            return filename
         else:
             print("Azure TTS Error:", response.status_code, response.text)
             return None
