@@ -47,7 +47,8 @@ def respond():
 
     audio_file = azure_tts_urdu(response)
     if audio_file:
-        return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+        return send_file(audio_file, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+        
 
     else:
         return jsonify({"error": "Failed to generate audio"}), 500
@@ -133,8 +134,8 @@ def voice_assist():
 
         os.remove(file_path)
 
-        
         return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+        
 
 
     except sr.UnknownValueError:
