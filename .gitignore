@@ -1,0 +1,16 @@
+
+# Ignore environment variables
+.env
+
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+
+# Temp files
+temp/
+*.mp3
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+

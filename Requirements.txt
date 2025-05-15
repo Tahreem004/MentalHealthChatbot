@@ -1,0 +1,12 @@
+Flask
+openai
+pydub
+SpeechRecognition
+googletrans==4.0.0-rc1
+werkzeug
+requests
+deep-translator
+openai
+python-dotenv
+azure-cognitiveservices-speech
+flask-cors
