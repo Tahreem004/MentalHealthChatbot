@@ -133,7 +133,9 @@ def voice_assist():
 
         os.remove(file_path)
 
-        return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True)
+        
+        return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+
 
     except sr.UnknownValueError:
         return jsonify({"error": "Could not understand audio"}), 400
