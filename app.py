@@ -46,12 +46,22 @@ def respond():
         response = "میں معذرت کرتا ہوں! میں صرف آپ کی ذہنی صحت سے متعلق مشورے دے سکتا ہوں۔"
 
     audio_file = azure_tts_urdu(response)
-    if audio_file:
-        return send_file(audio_file, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
-        
 
-    else:
-        return jsonify({"error": "Failed to generate audio"}), 500
+if audio_file and os.path.exists(audio_file):
+    from flask import after_this_request
+
+    @after_this_request
+    def cleanup(response_obj):
+        try:
+            os.remove(audio_file)
+        except Exception as e:
+            print(f"Cleanup error: {e}")
+        return response_obj
+
+    return send_file(audio_file, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+else:
+    return jsonify({"error": "Failed to generate or locate audio file"}), 500
+
 
 @app.route("/transcribe_translate", methods=["POST"])
 def transcribe_and_translate():
@@ -131,10 +141,23 @@ def voice_assist():
 
         # TTS Urdu audio response
         audio_response_path = azure_tts_urdu(response_text)
+os.remove(file_path)
 
-        os.remove(file_path)
+if audio_response_path and os.path.exists(audio_response_path):
+    from flask import after_this_request
 
-        return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+    @after_this_request
+    def cleanup(response_obj):
+        try:
+            os.remove(audio_response_path)
+        except Exception as e:
+            print(f"Cleanup error: {e}")
+        return response_obj
+
+    return send_file(audio_response_path, mimetype="audio/mpeg", as_attachment=True, download_name="response.mp3")
+else:
+    return jsonify({"error": "Failed to generate or locate audio response"}), 500
+
         
 
 
