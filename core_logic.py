@@ -56,7 +56,7 @@ def is_query_mental_health_related(text):
     }
 
     try:
-        response = requests.post(OPENAI_URL, headers=headers, json=payload)
+        response = requests.post(OPENAI_API_URL, headers=headers, json=payload)
         result = response.json()
         answer = result["choices"][0]["message"]["content"].strip().lower()
         return "yes" in answer
