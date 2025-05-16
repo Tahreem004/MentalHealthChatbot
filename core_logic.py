@@ -73,12 +73,25 @@ def generate_response(english_text):
     }
     payload = {
         "model": "gpt-4o",
-        "messages": [
-            {
-                "role": "user",
-                "content": f"A patient says: \"{english_text}\". Respond shortly as a kind and helpful mental health therapist."
-            }
-        ]
+        #"messages": [
+            #{
+               # "role": "user",
+               # "content": f"A patient says: \"{english_text}\". Respond shortly as a kind and helpful mental health therapist."
+            #}
+        #]
+        "messages" : [
+        {
+            "role": "system",
+            "content": (
+                "You are a kind and helpful mental health therapist. "
+                "Provide concise, precise, and short responses suitable for Urdu-speaking users."
+            )
+        },
+        {
+            "role": "user",
+            "content": f"A patient says: \"{english_text}\". Respond briefly and helpfully."
+        }
+    ]
     }
 
     try:
