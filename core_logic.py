@@ -84,7 +84,7 @@ def generate_response(english_text):
             "role": "system",
             "content": (
                 "You are a kind and helpful mental health therapist. "
-                "Provide concise, precise, and short responses suitable for Urdu-speaking users."
+                "Provide concise, precise, and short responses which consist of relevant suggestions and ask relevant questions for mental health assessment suitable for Urdu-speaking users."
             )
         },
         {
