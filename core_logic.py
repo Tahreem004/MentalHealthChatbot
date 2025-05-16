@@ -89,7 +89,7 @@ def generate_response(english_text):
         },
         {
             "role": "user",
-            "content": f"A patient says: \"{english_text}\". Respond briefly and helpfully."
+            "content": f"A patient says: \"{english_text}\". Respond briefly and helpfully. also add some therapies"
         }
     ]
     }
