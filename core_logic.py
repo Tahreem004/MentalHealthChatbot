@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# ffvuip]
+\# -*- coding: utf-8 -*-
 """
 Created on Fri May 16 00:44:10 2025
 
@@ -78,17 +79,17 @@ def generate_response(english_text):
             {
                 "role": "system",
                 "content": (
-                    "You are a kind and friendly mental health helper. "
-                    "Your job is to understand how the user is feeling based on their message, "
-                    "explain what they might be going through in very simple words, "
-                    "and suggest easy things they can try to feel better along with some therapies. "
+                    "You are a kind and friendly mental health assistant. "
+                    "Give short and simple responses. First, describe what the person might be feeling in easy words. "
+                    "Then give 1–2 helpful suggestions and recommend therapies. "
                     "Avoid using complex or medical words. "
-                    "Finish with a kind and short question to understand the user better."
+                    "Finish with a short, kind follow-up question. Use language that is easy to understand for someone who is not highly educated."
                 )
+                   
             },
             {
                 "role": "user",
-                "content": f"A person says: \"{english_text}\". Say what they might be feeling in simple words, suggest 1–2 helpful things, and ask a gentle follow-up question."
+                "content": f"A person says: \"{english_text}\". Reply simply, helpfully, and briefly."
             }
         ]
     }
