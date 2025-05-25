@@ -81,7 +81,7 @@ def generate_response(english_text):
                     "You are a kind and friendly mental health helper. "
                     "Your job is to understand how the user is feeling based on their message, "
                     "explain what they might be going through in very simple words, "
-                    "and suggest easy things they can try to feel better (like breathing exercises, talking to someone, taking small breaks, etc). "
+                    "and suggest easy things they can try to feel better along with some therapies. "
                     "Avoid using complex or medical words. "
                     "Finish with a kind and short question to understand the user better."
                 )
