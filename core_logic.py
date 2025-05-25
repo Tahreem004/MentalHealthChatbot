@@ -71,27 +71,26 @@ def generate_response(english_text):
         "HTTP-Referer": "http://localhost",
         "X-Title": "MentalHealthBot"
     }
+
     payload = {
         "model": "gpt-4o",
-        #"messages": [
-            #{
-               # "role": "user",
-               # "content": f"A patient says: \"{english_text}\". Respond shortly as a kind and helpful mental health therapist."
-            #}
-        #]
-        "messages" : [
-        {
-            "role": "system",
-            "content": (
-                "You are a kind and helpful mental health therapist. "
-                "Provide concise, precise, and short responses which consist of relevant suggestions and ask relevant questions for mental health assessment suitable for Urdu-speaking users."
-            )
-        },
-        {
-            "role": "user",
-            "content": f"A patient says: \"{english_text}\". Respond briefly and helpfully. also add some therapies"
-        }
-    ]
+        "messages": [
+            {
+                "role": "system",
+                "content": (
+                    "You are a kind and friendly mental health helper. "
+                    "Your job is to understand how the user is feeling based on their message, "
+                    "explain what they might be going through in very simple words, "
+                    "and suggest easy things they can try to feel better (like breathing exercises, talking to someone, taking small breaks, etc). "
+                    "Avoid using complex or medical words. "
+                    "Finish with a kind and short question to understand the user better."
+                )
+            },
+            {
+                "role": "user",
+                "content": f"A person says: \"{english_text}\". Say what they might be feeling in simple words, suggest 1–2 helpful things, and ask a gentle follow-up question."
+            }
+        ]
     }
 
     try:
@@ -101,6 +100,8 @@ def generate_response(english_text):
     except Exception as e:
         print(f"Response generation failed: {e}")
         return "Error generating response."
+
+
 
 def azure_tts_urdu(text):
     try:
