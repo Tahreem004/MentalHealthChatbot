@@ -41,15 +41,17 @@ def translate_english_to_urdu(text):
     result = response.json()
     return result[0]['translations'][0]['text']
 
+
 def is_query_mental_health_related(text):
     headers = {
         "Authorization": f"Bearer {OPENAI_API_KEY}",
         "Content-Type": "application/json"
     }
     prompt = (
-        "You are a classifier. Respond only with 'Yes' or 'No'.\n"
-        "Is the following text related to mental health, physical health, emotions, depression, anxiety, or therapy?\n\n"
-        f"Text: \"{text}\"\nAnswer:"
+        "You are a highly accurate mental health content detector. "
+        "Respond only with 'Yes' or 'No'.\n"
+        "Does the following message talk about emotional well-being, physical health sadness, depression, anxiety, stress, trauma, suicidal thoughts, loneliness, or therapy?\n\n"
+        f"Message: \"{text}\"\nAnswer:"
     )
     payload = {
         "model": "gpt-4o",
@@ -63,7 +65,8 @@ def is_query_mental_health_related(text):
         return "yes" in answer
     except Exception as e:
         print(f"Classifier Exception: {e}")
-        return False
+        return True  # Assume yes to be safe
+
 
 def generate_response(english_text):
     headers = {
@@ -79,11 +82,12 @@ def generate_response(english_text):
             {
                 "role": "system",
                 "content": (
-                    "You are a kind and friendly mental health assistant. "
-                    "Give short and simple responses. First, describe what the person might be feeling in easy words. "
-                    "Then give 1–2 helpful suggestions and recommend therapies. "
-                    "Avoid using complex or medical words. "
-                    "Finish with a short, kind follow-up question. Use language that is easy to understand for someone who is not highly educated."
+                    "You are a warm, kind, and emotionally intelligent virtual therapist. "
+                    "Always respond with empathy. First, gently reflect the person’s possible feelings. "
+                    "Then offer 2 clear suggestions for how they might cope or get support. "
+                    "Avoid technical or medical terms. Use simple, friendly language like you’re talking to someone you care about deeply. "
+                    "Always end with a compassionate question to continue the conversation."
+        
                 )
                    
             },
