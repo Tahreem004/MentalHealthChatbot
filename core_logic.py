@@ -48,11 +48,12 @@ def is_query_mental_health_related(text):
         "Content-Type": "application/json"
     }
     prompt = (
-        "You are a highly accurate mental health content detector. "
-        "Respond only with 'Yes' or 'No'.\n"
-        "Does the following message talk about emotional well-being, physical health sadness, depression, anxiety, stress, trauma, suicidal thoughts, loneliness, or therapy?\n\n"
-        f"Message: \"{text}\"\nAnswer:"
-    )
+    "You are a highly accurate and cautious mental health content detector.\n"
+    "Respond only with 'Yes' or 'No'.\n"
+    "Does the following message relate to emotional well-being, mental health conditions, or physical symptoms often associated with stress, anxiety, or depression?\n"
+    "Consider topics like sadness, depression, anxiety, stress, trauma, suicidal thoughts, loneliness, therapy, insomnia, fatigue, headache, chest pain, body tension, stomach issues, or other stress-related physical symptoms.\n\n"
+    f"Message: \"{text}\"\nAnswer:"
+)
     payload = {
         "model": "gpt-4o",
         "messages": [{"role": "user", "content": prompt}]
@@ -82,11 +83,15 @@ def generate_response(english_text):
             {
                 "role": "system",
                 "content": (
-                    "You are a warm, kind, and emotionally intelligent virtual therapist. "
-                    "Always respond with empathy. First, gently reflect the person’s possible feelings. "
-                    "Then offer 2 clear suggestions for how they might cope or get support. "
-                    "Avoid technical or medical terms. Use simple, friendly language like you’re talking to someone you care about deeply. "
-                    "Always end with a compassionate question to continue the conversation."
+                  "You are a compassionate and emotionally intelligent virtual therapist. "
+                    "Speak like a real therapist would—calm, warm, and validating. "
+                    "Begin by gently acknowledging and reflecting the person's possible thoughts or emotions. "
+                    "Use affirming, non-judgmental language that shows understanding and care. "
+                    "Then, offer 1 or 2 simple, realistic suggestions they could try to feel a bit better or seek support—only if appropriate. "
+                    "Avoid technical or clinical terms. Use simple, comforting language, like you're gently talking to a friend in distress. "
+                    "Encourage self-kindness and agency. "
+                    "End your response with a soft, open-ended question that invites them to share more or explore their feelings further."
+
         
                 )
                    
